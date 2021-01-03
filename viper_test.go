@@ -73,6 +73,7 @@ NAME_DOTENV=Cake`)
 var jsonExample = []byte(`{
 "id": "0001",
 "type": "donut",
+// It's edible
 "name": "Cake",
 "ppu": 0.55,
 "batters": {

@@ -46,6 +46,7 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/spf13/pflag"
 	"github.com/subosito/gotenv"
+	"github.com/yosuke-furukawa/json5/encoding/json5"
 	"gopkg.in/ini.v1"
 	"gopkg.in/yaml.v2"
 )
@@ -1586,10 +1587,9 @@ func (v *Viper) unmarshalReader(in io.Reader, c map[string]interface{}) error {
 		}
 
 	case "json":
-		if err := json.Unmarshal(buf.Bytes(), &c); err != nil {
+		if err := json5.Unmarshal(buf.Bytes(), &c); err != nil {
 			return ConfigParseError{err}
 		}
-
 	case "hcl":
 		obj, err := hcl.Parse(buf.String())
 		if err != nil {
@@ -1661,7 +1661,7 @@ func (v *Viper) marshalWriter(f afero.File, configType string) error {
 	c := v.AllSettings()
 	switch configType {
 	case "json":
-		b, err := json.MarshalIndent(c, "", "  ")
+		b, err := json5.MarshalIndent(c, "", "  ")
 		if err != nil {
 			return ConfigMarshalError{err}
 		}
@@ -1669,7 +1669,6 @@ func (v *Viper) marshalWriter(f afero.File, configType string) error {
 		if err != nil {
 			return ConfigMarshalError{err}
 		}
-
 	case "hcl":
 		b, err := json.Marshal(c)
 		if err != nil {
